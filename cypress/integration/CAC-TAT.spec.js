@@ -90,7 +90,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         .should('have.value', '')
   })
 
-  it.only('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', function() {
+  it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', function() {
     cy.clock()
     cy.contains('.button', 'Enviar').click()
 
@@ -199,6 +199,33 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         .click()
 
     cy.contains('Talking About Testing').should('be.visible')
+  })
+
+  // Utilizacao do .invoke
+  it('exibe e esconde as mensagens de sucesso e erro usando o .invoke', () => {
+    cy.get('.success')
+      .should('not.be.visible')
+      .invoke('show')
+      .should('be.visible')
+      .and('contain', 'Mensagem enviada com sucesso.')
+      .invoke('hide')
+      .should('not.be.visible')
+    
+    cy.get('.error')
+      .should('not.be.visible')
+      .invoke('show')
+      .should('be.visible')
+      .and('contain', 'Valide os campos obrigatórios!')
+      .invoke('hide')
+      .should('not.be.visible')
+  })
+
+  it.only('preenche campo de texto utilizando .invoke()', function() {
+    let texto = Cypress._.repeat('1234567890', 20)
+
+    cy.get('#open-text-area')
+      .invoke('val', texto)
+      .should('have.value', texto)
   })
 
 })
